@@ -34,31 +34,6 @@ struct SettingsView: View {
                 .tint(.celadon)
             }
             
-            // Reminders Section
-            Section(header: Text("Reminders")) {
-                Toggle("Daily Reminder", isOn: Binding(
-                    get: { userPreferences.dailyReminderEnabled },
-                    set: { newValue in
-                        userPreferences.dailyReminderEnabled = newValue
-                        try? modelContext.save()
-                    }
-                ))
-                .tint(.celadon)
-                
-                if userPreferences.dailyReminderEnabled {
-                    DatePicker("Reminder Time", 
-                               selection: Binding(
-                                get: { userPreferences.reminderTime },
-                                set: { newValue in
-                                    userPreferences.reminderTime = newValue
-                                    try? modelContext.save()
-                                }
-                               ),
-                               displayedComponents: .hourAndMinute)
-                    .datePickerStyle(.compact)
-                }
-            }
-            
             // Session Preferences
             Section(header: Text("Session Preferences")) {
                 Stepper(value: Binding(

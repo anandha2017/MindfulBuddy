@@ -30,17 +30,11 @@ final class MeditationSession {
 
 @Model
 final class UserPreferences {
-    var dailyReminderEnabled: Bool
-    var reminderTime: Date
     var preferredDuration: TimeInterval
     var darkModeEnabled: Bool
     
-    init(dailyReminderEnabled: Bool = false, 
-         reminderTime: Date = Calendar.current.date(bySettingHour: 8, minute: 0, second: 0, of: Date())!,
-         preferredDuration: TimeInterval = 300, // 5 minutes
+    init(preferredDuration: TimeInterval = 300, // 5 minutes
          darkModeEnabled: Bool = false) {
-        self.dailyReminderEnabled = dailyReminderEnabled
-        self.reminderTime = reminderTime
         self.preferredDuration = preferredDuration
         self.darkModeEnabled = darkModeEnabled
     }
