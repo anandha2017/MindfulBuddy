@@ -1,5 +1,5 @@
 //
-//  Item.swift
+//  MeditationSession.swift
 //  MindfulBuddy
 //
 //  Created by Anandha Ponnampalam on 28/03/2025.
@@ -8,11 +8,40 @@
 import Foundation
 import SwiftData
 
+enum SessionType: String, Codable {
+    case timed
+    case guided
+}
+
 @Model
-final class Item {
-    var timestamp: Date
+final class MeditationSession {
+    var startTime: Date
+    var duration: TimeInterval
+    var type: SessionType
+    var notes: String?
     
-    init(timestamp: Date) {
-        self.timestamp = timestamp
+    init(startTime: Date, duration: TimeInterval, type: SessionType, notes: String? = nil) {
+        self.startTime = startTime
+        self.duration = duration
+        self.type = type
+        self.notes = notes
+    }
+}
+
+@Model
+final class UserPreferences {
+    var dailyReminderEnabled: Bool
+    var reminderTime: Date
+    var preferredDuration: TimeInterval
+    var darkModeEnabled: Bool
+    
+    init(dailyReminderEnabled: Bool = false, 
+         reminderTime: Date = Calendar.current.date(bySettingHour: 8, minute: 0, second: 0, of: Date())!,
+         preferredDuration: TimeInterval = 300, // 5 minutes
+         darkModeEnabled: Bool = false) {
+        self.dailyReminderEnabled = dailyReminderEnabled
+        self.reminderTime = reminderTime
+        self.preferredDuration = preferredDuration
+        self.darkModeEnabled = darkModeEnabled
     }
 }

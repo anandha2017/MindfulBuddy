@@ -12,12 +12,20 @@ import SwiftData
 struct MindfulBuddyApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            MeditationSession.self,
+            UserPreferences.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
+            // Initialize default preferences if none exist
+            let context = container.mainContext
+            let fetchDescriptor = FetchDescriptor<UserPreferences>()
+            if try context.fetch(fetchDescriptor).isEmpty {
+                context.insert(UserPreferences())
+            }
+            return container
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
