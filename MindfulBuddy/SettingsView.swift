@@ -36,15 +36,22 @@ struct SettingsView: View {
             
             // Session Preferences
             Section(header: Text("Session Preferences")) {
-                Stepper(value: Binding(
-                    get: { Int(userPreferences.preferredDuration / 60) },
-                    set: { newValue in
-                        userPreferences.preferredDuration = TimeInterval(newValue * 60)
-                        try? modelContext.save()
+            Stepper(value: Binding(
+                get: { Int(userPreferences.preferredDuration / 60) },
+                set: { newValue in
+                    userPreferences.preferredDuration = TimeInterval(newValue * 60)
+                    do {
+                        try modelContext.save()
+                    } catch {
+                        print("Failed to save duration preference: \(error)")
                     }
-                ), in: 1...60, step: 1) {
-                    Text("Default Duration: \(Int(userPreferences.preferredDuration / 60)) min")
                 }
+            ), in: 1...60, step: 1) {
+                Text("Default Duration: \(Int(userPreferences.preferredDuration / 60)) min")
+            }
+            .onChange(of: userPreferences.preferredDuration) { _ in
+                // Force UI update when preference changes
+            }
             }
             
             // App Section

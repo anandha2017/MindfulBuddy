@@ -10,7 +10,9 @@ import SwiftData
 
 struct TimerView: View {
     @Environment(\.modelContext) private var modelContext
-    @State private var timerDuration: TimeInterval = 300 // Default 5 minutes
+    @Query private var preferences: [UserPreferences]
+    
+    @State private var timerDuration: TimeInterval = 300
     @State private var timeRemaining: TimeInterval = 300
     @State private var timerIsActive = false
     @State private var timer: Timer?
@@ -93,8 +95,20 @@ struct TimerView: View {
             .padding(.bottom, 30)
         }
         .navigationTitle("Meditation Timer")
+        .onAppear {
+            if let prefDuration = preferences.first?.preferredDuration {
+                timerDuration = prefDuration
+                timeRemaining = prefDuration
+            }
+        }
         .onChange(of: timerDuration) { newDuration in
             if !timerIsActive {
+                timeRemaining = newDuration
+            }
+        }
+        .onChange(of: preferences.first?.preferredDuration) { newDuration in
+            if let newDuration = newDuration, !timerIsActive {
+                timerDuration = newDuration
                 timeRemaining = newDuration
             }
         }

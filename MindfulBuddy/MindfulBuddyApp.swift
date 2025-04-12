@@ -27,7 +27,22 @@ struct MindfulBuddyApp: App {
             }
             return container
         } catch {
-            fatalError("Could not create ModelContainer: \(error)")
+            let alert = UIAlertController(
+                title: "Database Error",
+                message: "Failed to initialize storage. Please reinstall the app.",
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            return WindowGroup {
+                ContentView()
+                    .modelContainer(sharedModelContainer)
+                    .alert(isPresented: .constant(true)) {
+                        Alert(
+                            title: Text("Database Error"),
+                            message: Text("Failed to initialize storage. Please reinstall the app."),
+                            dismissButton: .default(Text("OK"))
+                    }
+            }
         }
     }()
 
